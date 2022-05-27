@@ -12,7 +12,7 @@ python manage.py migrate
 echo ""
 echo ""
 echo "python manage.py createsuperuser"
-python manage.py createsuperuser
+python manage.py createsuperuser --username=gaulinmp --email=gaulinmp@gmail.com
 echo ""
 echo ""
 echo "python manage.py runserver"

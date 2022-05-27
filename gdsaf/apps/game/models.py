@@ -2,8 +2,10 @@
 
 # 3rd party imports
 from django.db import models
-from django.core.files.storage import FileSystemStorage
+# from django.core.files.storage import FileSystemStorage
 from django.contrib.auth.models import User
+# from django.conf import settings
+# replace user below with settings.AUTH_USER_MODEL if overriding User
 
 # current module imports
 
