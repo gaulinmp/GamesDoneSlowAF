@@ -8,11 +8,29 @@ from django.shortcuts import render, redirect
 
 from .models import Overwatch
 
+@login_required
 def index(request):
-    if not request.user.is_authenticated:
-        return redirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+    keep_fields = 'id username first_name last_name'.split()
 
-    data = {"games": "Overwatch"}
+    user_agg = (
+        Overwatch.objects
+        .values('user')
+        .order_by('user')
+        .annotate(overall_total=models.Sum('total_points'))
+    )
+    agg_stats = {}
+    for u in user_agg:
+        agg_stats[u['user']] = {'overall_total': u['overall_total']}
+
+    for usr in User.objects.filter(id__in=agg_stats.keys()).values():
+        if usr['id'] not in agg_stats: continue
+        _d = agg_stats[usr['id']]
+        for c in keep_fields:
+            _d[c] = usr[c]
+
+    data = {
+        'all_agg': sorted(agg_stats.values(), key=lambda x: x['overall_total'], reverse=True),
+    }
 
     return render(request, 'game/index.html', data)
 
