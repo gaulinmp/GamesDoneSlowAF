@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block navlink %}
+<a class="nav-link active" aria-current="page" href="#">Games</a>
+{% endblock navlink %}
+
+{% block content %}
+<h1>Hey {{ user.first_name }}.</h1>
+<p>Welcome to the GAMES!</p>
+
+<div class="card text-white bg-dark mb-3" style="width: 10rem;">
+  <a href="{% url 'game:overwatch' %}">
+    <img src="{% static 'images/ow.svg' %}" class="card-img-top" alt="Overwatch">
+  </a>
+  <!-- <div class="card-body">
+    <p class="card-text">Overwatch Stats</p>
+  </div> -->
+</div>
+
+{% endblock content %}

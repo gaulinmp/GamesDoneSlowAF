@@ -2,7 +2,7 @@
 
 Summer Game Score Tracking
 
-[![Built with Cookiecutter Django](https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg?logo=cookiecutter)](https://github.com/cookiecutter/cookiecutter-django/)
+[![Built with Cookiecutter](https://img.shields.io/badge/built%20with-Cookiecutter-ff69b4.svg?logo=cookiecutter)](https://github.com/cookiecutter/cookiecutter-django/)
 [![Black code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
 License: MIT
@@ -11,8 +11,8 @@ License: MIT
 
 ### Installing / Running
 
-If you use virtualenv, just translate `conda` ==> `virtualenv` in whatever smart way you know how, you're obviously
-smarter if you're not using conda so you can figure it out.
+If you use `virtualenv`, just translate `conda` ==> `virtualenv` in whatever smart way you know how, you're obviously
+smarter if you're not using `conda` so you can figure it out.
 
 To get up and running:
 

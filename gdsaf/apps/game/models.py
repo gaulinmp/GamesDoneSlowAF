@@ -1,7 +1,7 @@
 # STDlib imports
 
 # 3rd party imports
-from django.db import models
+from django.db import models as djm
 # from django.core.files.storage import FileSystemStorage
 from django.contrib.auth.models import User
 # from django.conf import settings
@@ -9,49 +9,68 @@ from django.contrib.auth.models import User
 
 # current module imports
 
+POINTS_PER_HEAL = 1.1
+POINTS_PER_KILL = 500
+POINTS_PER_ASSIST = 500
+POINTS_PER_DEATH = -500
+POINTS_PER_OBJECTIVE_SECOND = 10
+POINTS_PER_POTG = 1000
+POINTS_PER_CARD = 500
+POINTS_PER_FRIEND = 500
+LOSS_SCALAR = .72
 
-class Overwatch(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    datetime = models.DateTimeField(auto_now_add=True)
+class OverwatchManager(djm.Manager):
+    def get_queryset(self):
+        """Overrides the djm.Manager method"""
+        return (
+            super()
+            .get_queryset()
+            .annotate(total_points = djm.ExpressionWrapper(
+                    ( djm.F('num_damage')
+                    + djm.F('num_blocked')
+                    + djm.F('num_healed') * djm.Value(POINTS_PER_HEAL)
+                    + djm.F('num_kills') * djm.Value(POINTS_PER_KILL)
+                    + djm.F('num_assists') * djm.Value(POINTS_PER_ASSIST)
+                    + djm.F('num_deaths') * djm.Value(POINTS_PER_DEATH)
+                    + djm.F('objective_time') * djm.Value(POINTS_PER_OBJECTIVE_SECOND)
+                    + djm.F('got_potg') * djm.Value(POINTS_PER_POTG)
+                    + djm.F('got_card') * djm.Value(POINTS_PER_CARD)
+                    + djm.F('with_friend') * djm.Value(POINTS_PER_FRIEND)
+                    ) * (djm.F('did_win') * djm.Value(1-LOSS_SCALAR) + djm.Value(LOSS_SCALAR)),
+                output_field=djm.IntegerField())
+            ) # end annotate
+        ) # end return
+
+class Overwatch(djm.Model):
+    user = djm.ForeignKey(User, on_delete=djm.CASCADE)
+    datetime = djm.DateTimeField(auto_now_add=True)
 
     # Base points - best of either damage dealt, healing, damage blocked
-    num_damage = models.IntegerField("Damage Dealt", default=0)
-    num_blocked = models.IntegerField("Damage Blocked", default=0)
-    num_healed = models.IntegerField("Healing Done", default=0)
-    POINTS_PER_HEAL = 1.1
+    num_damage = djm.IntegerField("Damage Dealt", default=0)
+    num_blocked = djm.IntegerField("Damage Blocked", default=0)
+    num_healed = djm.IntegerField("Healing Done", default=0)
     # +500 pts for each kill / kill assist (not sure what relevant stats are for healers)
-    num_kills = models.IntegerField("Number of Kills", default=0)
-    POINTS_PER_KILL = 500
-    num_assists = models.IntegerField("Number of Assists", default=0)
-    POINTS_PER_ASSIST = 500
+    num_kills = djm.IntegerField("Number of Kills", default=0)
+    num_assists = djm.IntegerField("Number of Assists", default=0)
     # -500 pts for each death
-    num_deaths = models.IntegerField("Number of Deaths", default=0)
-    POINTS_PER_DEATH = -500
+    num_deaths = djm.IntegerField("Number of Deaths", default=0)
     # +any objective time x10 (in seconds)
-    objective_time = models.IntegerField("Objective Time (seconds)", default=0)
-    POINTS_PER_OBJECTIVE_SECOND = 10
+    objective_time = djm.IntegerField("Objective Time (seconds)", default=0)
     # +1000 pts for potg
-    got_potg = models.BooleanField("Got POTG?", default=False)
-    POINTS_PER_POTG = 1000
+    got_potg = djm.BooleanField("Got POTG?", default=False)
     # +500 pts for any card
-    got_card = models.BooleanField("Got a Card?", default=False)
-    POINTS_PER_CARD = 500
+    got_card = djm.BooleanField("Got a Card?", default=False)
     # total x1.25 for a win; x0.9 for a loss ~= to 1 for win, .72 for loss
-    did_win = models.BooleanField("Did you win?")
-    LOSS_SCALAR = .72
+    did_win = djm.BooleanField("Did you win?")
+    # +500 pts for playing with friend
+    with_friend = djm.BooleanField("Played with friend?", default=False)
 
-    def get_points(self):
-        return (
-            self.num_damage
-            + self.num_blocked
-            + self.num_healed * self.POINTS_PER_HEAL
-            + self.num_kills * self.POINTS_PER_KILL
-            + self.num_assists * self.POINTS_PER_ASSIST
-            + self.num_deaths * self.POINTS_PER_DEATH
-            + self.objective_time * self.POINTS_PER_OBJECTIVE_SECOND
-            + self.got_potg * self.POINTS_PER_POTG
-            + self.got_card * self.POINTS_PER_CARD
-        ) * (int(self.did_win) * (1-self.LOSS_SCALAR) + self.LOSS_SCALAR)
+    # manager
+    objects = OverwatchManager()
 
     def __str__(self):
-        return f"{self.user} @ {self.datetime:%b-%d %H:%M} == {self.get_points():,.0f}"
+        try:
+            return f"{self.user} @ {self.datetime:%b-%d %H:%M} == {self.total_points:,.0f}"
+        except AttributeError:
+            pass
+        return f"{self.user} @ {self.datetime:%b-%d %H:%M}"

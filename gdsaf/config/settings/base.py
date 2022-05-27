@@ -70,9 +70,6 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-    # "users",
-    # GDSAF apps
-    # "apps.game.apps.GameConfig",
     "apps.game.GameConfig",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -94,9 +91,10 @@ AUTHENTICATION_BACKENDS = [
 # AUTH_USER_MODEL = "User"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
 # LOGIN_REDIRECT_URL = "users:redirect"
+LOGIN_REDIRECT_URL = "home"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
-# LOGIN_URL = "login"
-# LOGOUT_URL = "login"
+LOGIN_URL = "/login"
+LOGOUT_URL = "/logout"
 
 # PASSWORDS
 # ------------------------------------------------------------------------------
@@ -134,11 +132,11 @@ MIDDLEWARE = [
 # STATIC
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-root
-STATIC_ROOT = str(ROOT_DIR / "static")
+# STATIC_ROOT = str(ROOT_DIR / "static")
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-url
-STATIC_URL = "/static/"
+STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
-# STATICFILES_DIRS = [str(APPS_DIR / "static")]
+STATICFILES_DIRS = [str(ROOT_DIR / "static")]
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
@@ -150,7 +148,7 @@ STATICFILES_FINDERS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-root
 MEDIA_ROOT = str(ROOT_DIR / "media")
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-url
-MEDIA_URL = "/media/"
+MEDIA_URL = "media/"
 
 # TEMPLATES
 # ------------------------------------------------------------------------------
