@@ -61,12 +61,17 @@ class Overwatch(djm.Model):
     # +500 pts for any card
     got_card = djm.BooleanField("Got a Card?", default=False)
     # total x1.25 for a win; x0.9 for a loss ~= to 1 for win, .72 for loss
-    did_win = djm.BooleanField("Did you win?")
+    did_win = djm.BooleanField("Did you win?", default=False)
     # +500 pts for playing with friend
     with_friend = djm.BooleanField("Played with friend?", default=False)
 
     # manager
     objects = OverwatchManager()
+
+    # for forms
+    bool_fields = ['got_potg', 'got_card', 'did_win', 'with_friend']
+    upload_fields = ['num_damage', 'num_blocked', 'num_healed', 'num_kills', 'num_assists', 'num_deaths',
+                     'objective_time', *bool_fields]
 
     def __str__(self):
         try:

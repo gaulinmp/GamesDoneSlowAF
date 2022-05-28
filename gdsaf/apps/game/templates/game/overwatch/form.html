@@ -1,0 +1,101 @@
+{% extends "game/overwatch/get.html" %}
+{% load static %}
+
+{% block content %}
+<h1>Overwatch</h1>
+
+<form action="{% url 'game:overwatch' %}" method="post" class="row">
+  {% csrf_token %}
+  <input type="hidden" name="next" value="{{ request.GET.next|default:'game/overwatch' }}" />
+
+  <div class="col-12 align-self-center mb-3">
+    <div class="btn-group btn-group-lg" role="group" aria-label="Game Checks">
+      <input type="checkbox" class="btn-check" id="with_friend" name="with_friend" autocomplete="off">
+      <label class="btn btn-outline-primary" for="with_friend">w/ Friend</label>
+
+      <input type="checkbox" class="btn-check" id="did_win" name="did_win" autocomplete="off">
+      <label class="btn btn-outline-primary" for="did_win">Won</label>
+
+      <input type="checkbox" class="btn-check" id="got_potg" name="got_potg" autocomplete="off">
+      <label class="btn btn-outline-primary" for="got_potg">POTG</label>
+
+      <input type="checkbox" class="btn-check" id="got_card" name="got_card" autocomplete="off">
+      <label class="btn btn-outline-primary" for="got_card">Card</label>
+    </div>
+  </div>
+
+  <!-- Damage: num_damage -->
+  <div class="row mb-3">
+    <label for="num_damage" class="col-sm-12 col-md-3 col-form-label">Damage (<output id="val_num_damage">0</output>)</label>
+    <div class="col-sm-12 col-md-8">
+      <input type="range" class="form-range" id="num_damage" name="num_damage" value="0" min="0" max="30000"
+              oninput="getElementById('val_num_damage').value = this.value">
+    </div>
+  </div>
+
+  <!-- Blocked: num_blocked -->
+  <div class="row mb-3">
+    <label for="num_blocked" class="col-sm-12 col-md-3 col-form-label">Blocked (<output
+        id="val_num_blocked">0</output>)</label>
+    <div class="col-sm-12 col-md-8">
+      <input type="range" class="form-range" id="num_blocked" name="num_blocked" value="0" min="0" max="30000"
+        oninput="getElementById('val_num_blocked').value = this.value">
+    </div>
+  </div>
+
+  <!-- Healed: num_healed -->
+  <div class="row mb-3">
+    <label for="num_healed" class="col-sm-12 col-md-3 col-form-label">Healed (<output
+        id="val_num_healed">0</output>)</label>
+    <div class="col-sm-12 col-md-8">
+      <input type="range" class="form-range" id="num_healed" name="num_healed" value="0" min="0" max="20000"
+        oninput="getElementById('val_num_healed').value = this.value">
+    </div>
+  </div>
+
+  <!-- kills: num_kills -->
+  <div class="row mb-3">
+    <label for="num_kills" class="col-sm-12 col-md-3 col-form-label">Kills (<output
+        id="val_num_kills">0</output>)</label>
+    <div class="col-sm-12 col-md-8">
+      <input type="range" class="form-range" id="num_kills" name="num_kills" value="0" min="0" max="50"
+        oninput="getElementById('val_num_kills').value = this.value">
+    </div>
+  </div>
+
+  <!-- assists: num_assists -->
+  <div class="row mb-3">
+    <label for="num_assists" class="col-sm-12 col-md-3 col-form-label">Assists (<output
+        id="val_num_assists">0</output>)</label>
+    <div class="col-sm-12 col-md-8">
+      <input type="range" class="form-range" id="num_assists" name="num_assists" value="0" min="0" max="50"
+        oninput="getElementById('val_num_assists').value = this.value">
+    </div>
+  </div>
+
+  <!-- deaths: num_deaths -->
+  <div class="row mb-3">
+    <label for="num_deaths" class="col-sm-12 col-md-3 col-form-label">Deaths (<output
+        id="val_num_deaths">0</output>)</label>
+    <div class="col-sm-12 col-md-8">
+      <input type="range" class="form-range" id="num_deaths" name="num_deaths" value="0" min="0" max="50"
+        oninput="getElementById('val_num_deaths').value = this.value">
+    </div>
+  </div>
+
+  <!-- Objective Time: objective_time -->
+  <div class="row mb-3">
+    <label for="objective_time" class="col-sm-12 col-md-3 col-form-label">Objective Time (<output
+        id="val_objective_time">0</output> seconds)</label>
+    <div class="col-sm-12 col-md-8">
+      <input type="range" class="form-range" id="objective_time" name="objective_time" value="0" min="0" max="600"
+        oninput="getElementById('val_objective_time').value = this.value">
+    </div>
+  </div>
+
+  <div class="mt-3 row">
+    <button type="submit" class="btn btn-danger">Submit</button>
+  </div>
+</form>
+
+{% endblock content %}

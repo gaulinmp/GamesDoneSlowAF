@@ -6,7 +6,7 @@
 {% endblock navlink %}
 
 {% block content %}
-{% if all_agg %}
+{% if all_aggregate %}
 <h3>Leaderboard</h3>
 <table class="table table-dark table-striped">
   <thead>
@@ -19,13 +19,13 @@
     </tr>
   </thead>
   <tbody>
-    {% for participant in all_agg %}
+    {% for participant in all_aggregate %}
     <tr>
       <th scope="row">{{ forloop.counter }}</th>
       <td>{{ participant.username }}</td>
       <td>{{ participant.first_name }}</td>
       <td>{{ participant.last_name }}</td>
-      <td>{{ participant.overall_total }}</td>
+      <td>{{ participant.total_points }}</td>
     </tr>
     {% endfor %}
   </tbody>

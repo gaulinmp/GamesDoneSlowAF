@@ -1,4 +1,6 @@
-django>=4.0.0
-django-crispy-forms>=1.14.0  # https://github.com/django-crispy-forms/django-crispy-forms
-crispy-bootstrap5==0.6  # https://github.com/django-crispy-forms/crispy-bootstrap5
-django-debug-toolbar==3.4.0 # https://github.com/jazzband/django-debug-toolbar
+django<4.0
+django-crispy-forms  # https://github.com/django-crispy-forms/django-crispy-forms
+crispy-bootstrap5  # https://github.com/django-crispy-forms/crispy-bootstrap5
+django-debug-toolbar # https://github.com/jazzband/django-debug-toolbar
+#contextvars
+#typing_extensions
