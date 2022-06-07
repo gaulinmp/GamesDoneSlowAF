@@ -34,13 +34,27 @@
 
 
 <h3>Available Games</h3>
-<div class="card text-white bg-dark mb-3" style="width: 10rem;">
-  <a href="{% url 'game:overwatch' %}">
-    <img src="{% static 'images/ow.svg' %}" class="card-img-top" alt="Overwatch">
-  </a>
-  <!-- <div class="card-body">
-    <p class="card-text">Overwatch Stats</p>
-  </div> -->
-</div>
+<div class="row">
+
+
+  <div class="card text-white bg-dark mb-3" style="width: 10rem;">
+    <a href="{% url 'game:overwatch' %}">
+      <img src="{% static 'images/ow.svg' %}" class="card-img-top" alt="Overwatch">
+    </a>
+    <!-- <div class="card-body">
+      <p class="card-text">Overwatch Stats</p>
+    </div> -->
+  </div>
+
+  <div class="card text-white bg-dark mb-3" style="width: 10rem;">
+    <a href="{% url 'game:rocketleague' %}">
+      <img src="{% static 'images/rl.svg' %}" class="card-img-top" alt="Rocket League">
+    </a>
+    <!-- <div class="card-body">
+      <p class="card-text">Rocket League Stats</p>
+    </div> -->
+  </div>
+
+</div> <!-- end row -->
 
 {% endblock content %}

@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
                 ('objective_time', models.IntegerField(default=0, verbose_name='Objective Time (seconds)')),
                 ('got_potg', models.BooleanField(default=False, verbose_name='Got POTG?')),
                 ('got_card', models.BooleanField(default=False, verbose_name='Got a Card?')),
-                ('did_win', models.BooleanField(verbose_name='Did you win?')),
+                ('did_win', models.BooleanField(default=False, verbose_name='Did you win?')),
                 ('with_friend', models.BooleanField(default=False, verbose_name='Played with friend?')),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],

@@ -1,0 +1,61 @@
+{% extends "game/overwatch/get.html" %}
+{% load static %}
+
+{% block content %}
+<h1>Rocket League</h1>
+
+<form action="{% url 'game:rocketleague' %}" method="post" class="row">
+  {% csrf_token %}
+  <input type="hidden" name="next" value="{{ request.GET.next|default:'game/rocketleague' }}" />
+
+  <!-- Damage: score -->
+  <div class="row mb-3">
+    <label for="score" class="col-sm-12 col-md-3 col-form-label">Damage (<output
+        id="val_score">0</output>)</label>
+    <div class="col-sm-12 col-md-8">
+      <input type="range" class="form-range" id="score" name="score" value="0" min="0" max="1000"
+        oninput="getElementById('val_score').value = this.value">
+    </div>
+  </div>
+
+  <div class="col-12 align-self-center mb-3">
+    <div class="btn-group btn-group-lg" role="group" aria-label="Level">
+      <input type="radio" class="btn-check" name="level" value="wood" id="level-wood" autocomplete="off">
+      <label class="btn btn-outline-success" for="level-wood">Wood</label>
+
+      <input type="radio" class="btn-check" name="level" value="bronze" id="level-bronze" autocomplete="off">
+      <label class="btn btn-outline-success" for="level-bronze">Bronze</label>
+
+      <input type="radio" class="btn-check" name="level" value="silver" id="level-silver" autocomplete="off">
+      <label class="btn btn-outline-secondary" for="level-silver">Silver</label>
+
+      <input type="radio" class="btn-check" name="level" value="gold" id="level-gold" autocomplete="off" checked>
+      <label class="btn btn-outline-warning" for="level-gold">Gold</label>
+
+      <input type="radio" class="btn-check" name="level" value="platinum" id="level-platinum" autocomplete="off">
+      <label class="btn btn-outline-info" for="level-platinum">Platinum</label>
+
+      <input type="radio" class="btn-check" name="level" value="diamond" id="level-diamond" autocomplete="off">
+      <label class="btn btn-outline-light" for="level-diamond">Diamond</label>
+
+      <input type="radio" class="btn-check" name="level" value="master" id="level-master" autocomplete="off">
+      <label class="btn btn-outline-primary" for="level-master">Master</label>
+    </div>
+  </div>
+
+  <div class="col-12 align-self-center mb-3">
+    <div class="btn-group btn-group-lg" role="group" aria-label="Game Checks">
+      <input type="checkbox" class="btn-check" id="did_win" name="did_win" autocomplete="off">
+      <label class="btn btn-outline-primary" for="did_win">Won</label>
+
+      <input type="checkbox" class="btn-check" id="got_mvp" name="got_mvp" autocomplete="off">
+      <label class="btn btn-outline-primary" for="got_mvp">MVP</label>
+    </div>
+  </div>
+
+  <div class="mt-3 row">
+    <button type="submit" class="btn btn-danger">Submit</button>
+  </div>
+</form>
+
+{% endblock content %}

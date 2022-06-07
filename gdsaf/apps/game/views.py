@@ -11,7 +11,8 @@ from django.views import View
 from django.views.generic.edit import CreateView
 
 
-from .models import Overwatch
+from .models import Overwatch, RocketLeague
+from .models.rocketleague import RLLevel
 
 KEEP_USER_FIELDS = ['id', 'username', 'first_name', 'last_name']
 
@@ -21,7 +22,7 @@ class GameIndexView(LoginRequiredMixin, View):
 
         user_with_agg = {u['id']:{**dict(u), 'total_points':0} for u in User.objects.all().values(*KEEP_USER_FIELDS)}
 
-        for game in [OverwatchView]:
+        for game in [OverwatchView, RocketLeagueView]:
             for _id,_tot in game().aggregate_points().items():
                 if _id in user_with_agg:
                     user_with_agg[_id]['total_points'] += _tot
@@ -62,12 +63,6 @@ class GenericGameView(LoginRequiredMixin, CreateView):
 
         return render(request, f"game/{self.template_dir}/get.html", data)
 
-    # def post(self, request, *args, **kwargs):
-    #     print(request.POST)
-    #     # print(request.POST['num_damage'])
-
-    #     return self.get(request, *args, **kwargs)
-
 class OverwatchView(GenericGameView):
     model = Overwatch
     template_dir = "overwatch"
@@ -86,6 +81,32 @@ class OverwatchView(GenericGameView):
                 newpost[_field] = True
             else:
                 newpost[_field] = False
+        request.POST = newpost
+        print(request.POST)
+        # print(request.POST['num_damage'])
+
+        return super().post(request, *args, **kwargs)
+
+
+class RocketLeagueView(GenericGameView):
+    model = RocketLeague
+    template_dir = "rocketleague"
+    template_name = "game/rocketleague/get.html"
+    fields = RocketLeague.upload_fields
+    success_url = reverse_lazy('game:rocketleague')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+    def post(self, request, *args, **kwargs):
+        newpost = request.POST.copy()
+        for _field in RocketLeague.bool_fields:
+            if _field in newpost:
+                newpost[_field] = True
+            else:
+                newpost[_field] = False
+        newpost["level"] = {v:k for k,v in RLLevel.choices}.get(newpost["level"], RLLevel.GOLD.value)
         request.POST = newpost
         print(request.POST)
         # print(request.POST['num_damage'])
