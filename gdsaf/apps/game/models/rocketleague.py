@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 
 # current module imports
 
-POINTS_PER_POINT = 1.1
+POINTS_PER_POINT = 10
 POINTS_PER_MVP = 500
 LOSS_SCALAR = 0.72
 
