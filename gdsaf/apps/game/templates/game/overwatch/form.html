@@ -94,8 +94,57 @@
   </div>
 
   <div class="mt-3 row">
-    <button type="submit" class="btn btn-danger">Submit</button>
+    <button type="submit" class="btn btn-danger">Submit (<output id="total_points">0</output> points)</button>
   </div>
 </form>
+
+<script>
+let form_inputs = document.getElementsByTagName("input");
+for (let this_input of form_inputs) {
+  this_input.addEventListener('change', function() {
+    updateSubmitValue();
+  });
+}
+
+var PD = {
+  "num_damage": 1,
+  "num_blocked": 1,
+  "num_healed": 1.1,
+  "num_kills": 500,
+  "num_assists": 500,
+  "num_deaths": -500,
+  "objective_time": 10,
+  "got_potg": 1000,
+  "got_card": 500,
+  "with_friend": 500,
+  "did_win": .72,
+};
+
+function updateSubmitValue() {
+  let total_points = 0;
+  for (let this_input of form_inputs) {
+    if (this_input.name == "") continue;
+
+    console.log("Parsing " + this_input.name + ": " + this_input.value);
+
+    if (this_input.type == "checkbox") {
+      if (this_input.checked
+          && (this_input.name.startsWith("got")
+              || this_input.name.startsWith("with"))
+          ) {
+        total_points += PD[this_input.name];
+      }
+    }
+    else if (this_input.type == "range") {
+      total_points += parseInt(this_input.value) * PD[this_input.name];
+    }
+  }
+  let win_check = document.getElementById("did_win");
+  if (!win_check.checked) total_points *= PD["did_win"];
+
+  document.getElementById("total_points").value = total_points.toFixed(0);
+}
+
+</script>
 
 {% endblock content %}

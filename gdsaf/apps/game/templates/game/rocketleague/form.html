@@ -54,8 +54,52 @@
   </div>
 
   <div class="mt-3 row">
-    <button type="submit" class="btn btn-danger">Submit</button>
+    <button type="submit" class="btn btn-danger">Submit (<output id="total_points">0</output> points)</button>
   </div>
 </form>
+
+<script>
+let form_inputs = document.getElementsByTagName("input");
+for (let this_input of form_inputs) {
+  this_input.addEventListener('change', function() {
+    updateSubmitValue();
+  });
+}
+
+var PD = {
+  "score": 10,
+  "got_mvp": 500,
+  "did_win": .72,
+  "rank": {
+    "wood": 0,
+    "bronze": 1,
+    "silver": 2,
+    "gold": 3,
+    "platinum": 4,
+    "diamond": 5,
+    "master": 6,
+    "intercept": 1.5,
+    "slope": 1/6
+  }
+};
+
+function updateSubmitValue() {
+  let total_points = 0
+
+  total_points += parseInt(document.getElementById("score").value) * PD["score"];
+
+  if (document.getElementById("got_mvp").checked) total_points += PD["got_mvp"];
+
+  if (!document.getElementById("did_win").checked) total_points *= PD["did_win"];
+
+  for (let this_input of document.getElementsByName("level")) {
+    if (this_input.checked) {
+      total_points *= PD["rank"]["intercept"] - PD["rank"]["slope"] * PD["rank"][this_input.value];
+    }
+  }
+
+  document.getElementById("total_points").value = total_points.toFixed(0);
+}
+</script>
 
 {% endblock content %}

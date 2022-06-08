@@ -9,6 +9,8 @@ from django.contrib.auth.models import User
 
 # current module imports
 
+POINTS_PER_DAMAGE = 1
+POINTS_PER_BLOCK = 1
 POINTS_PER_HEAL = 1.1
 POINTS_PER_KILL = 500
 POINTS_PER_ASSIST = 500
@@ -26,8 +28,8 @@ class OverwatchManager(djm.Manager):
             super()
             .get_queryset()
             .annotate(total_points = djm.ExpressionWrapper(
-                    ( djm.F('num_damage')
-                    + djm.F('num_blocked')
+                    ( djm.F('num_damage') * djm.Value(POINTS_PER_DAMAGE)
+                    + djm.F('num_blocked') * djm.Value(POINTS_PER_BLOCK)
                     + djm.F('num_healed') * djm.Value(POINTS_PER_HEAL)
                     + djm.F('num_kills') * djm.Value(POINTS_PER_KILL)
                     + djm.F('num_assists') * djm.Value(POINTS_PER_ASSIST)
